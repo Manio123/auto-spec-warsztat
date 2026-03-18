@@ -4,72 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Auto-Spec Warsztat | Serwis Online</title>
+    <title>Auto-Spec | Serwis</title>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <span style="color:white; font-size:1.4em; font-weight:bold;">🛠 AUTO-SPEC</span>
-            <div class="links">
-                <a href="/">Serwis</a>
-                <a href="/sklep">Sklep Części</a>
-                <a href="/login">Manager</a>
-            </div>
-        </div>
-    </nav>
-
-    <header>
-        <h1>Auto-Spec Serwis</h1>
-        <p>Twoje auto w rękach profesjonalistów. Umów wizytę online.</p>
-    </header>
-
+    <nav><div class="nav-container"><b style="color:white; font-size:1.2em;">🛠 AUTO-SPEC</b><div><a href="/">Serwis</a><a href="/sklep">Sklep</a><a href="/login">Admin</a></div></div></nav>
+    <header><h1>Serwis Samochodowy</h1><p>Szybkie terminy, profesjonalna obsługa.</p></header>
     <div class="container">
         <div class="card">
-            <h2>Umów wizytę w warsztacie</h2>
+            <h2>Umów wizytę online</h2>
             <form action="/add-request-client" method="POST">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                    <input type="text" name="client" placeholder="Imię i Nazwisko" required>
-                    <input type="tel" name="phone" placeholder="Twój telefon" required>
-                </div>
-                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:15px;">
-                    <input type="text" name="car" placeholder="Marka i Model auta" required>
-                    <input type="text" name="vin" placeholder="VIN (opcjonalnie)">
-                </div>
-                
-                <label>Typ usługi:</label>
+                <input type="text" name="client" placeholder="Imię i Nazwisko" required>
+                <input type="tel" name="phone" placeholder="Telefon kontaktowy" required>
+                <input type="text" name="car" placeholder="Auto (np. Audi A4)" required>
+                <input type="text" name="vin" placeholder="Numer VIN">
                 <select name="service_type">
-                    <option value="Mechanika Ogólna">Mechanika Ogólna</option>
-                    <option value="Wymiana Oleju/Filtrów">Wymiana Oleju/Filtrów</option>
-                    <option value="Klimatyzacja">Klimatyzacja</option>
-                    <option value="Hamulce/Zawieszenie">Hamulce/Zawieszenie</option>
+                    <option value="Mechanika">Mechanika ogólna</option>
+                    <option value="Olej">Serwis olejowy</option>
+                    <option value="Klima">Klimatyzacja</option>
                 </select>
-
-                <textarea name="desc" placeholder="Opisz usterkę lub co jest do zrobienia..."></textarea>
+                <textarea name="desc" placeholder="Opis problemu..."></textarea>
                 <button type="submit" class="btn">Wyślij zgłoszenie</button>
             </form>
         </div>
     </div>
-
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>🛠 AUTO-SPEC Babice</h4>
-                <p>Ulica Warsztatowa 1</p>
-                <p>32-551 Babice</p>
-            </div>
-            <div class="footer-section">
-                <h4>Godziny Otwarcia</h4>
-                <p>Pn - Pt: 8:00 - 17:00</p>
-                <p>Sobota: 9:00 - 13:00</p>
-            </div>
-            <div class="footer-section">
-                <h4>Kontakt</h4>
-                <p>📞 Telefon: +48 123 456 789</p>
-                <p>📧 Email: serwis@auto-spec.pl</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2026 Auto-Spec Warsztat. Wszelkie prawa zastrzeżone.
+        <div class="footer-grid">
+            <div><h4>Kontakt</h4><p>📞 +48 123 456 789</p><p>📧 biuro@auto-spec.pl</p></div>
+            <div><h4>Adres</h4><p>ul. Warsztatowa 1</p><p>32-551 Babice</p></div>
+            <div><h4>Godziny</h4><p>Pn-Pt: 8:00 - 17:00</p></div>
         </div>
     </footer>
 </body>
