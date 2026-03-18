@@ -1,85 +1,69 @@
-const express = require('express');
-const session = require('express-session');
-const sqlite3 = require('sqlite3').verbose();
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const path = require('path');
-
-const app = express();
-const db = new sqlite3.Database('./warsztat.db');
-
-// Inicjalizacja bazy
-db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL, desc TEXT)");
-    db.run("CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, client TEXT, car TEXT, desc TEXT)");
-});
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'auto-spec-2026', resave: false, saveUninitialized: true }));
-
-// --- AUTOMATYCZNE WYKRYWANIE ŚCIEŻKI ---
-// Sprawdzamy czy pliki są w folderze public czy w głównym
-const publicPath = fs.existsSync(path.join(__dirname, 'public')) 
-    ? path.join(__dirname, 'public') 
-    : __dirname;
-
-app.use(express.static(publicPath));
-
-app.get('/', (req, res) => {
-    const indexPath = path.join(publicPath, 'index.html');
-    if (fs.existsSync(indexPath)) {
-        res.sendFile(indexPath);
-    } else {
-        // Jeśli nie znajdzie pliku, wypisze listę plików na ekranie, żebyśmy wiedzieli co jest źle
-        const files = fs.readdirSync(__dirname);
-        res.status(404).send(`Błąd: Nie znaleziono index.html. Widoczne pliki: ${files.join(', ')}`);
-    }
-});
-
-app.get('/sklep', (req, res) => {
-    db.all("SELECT * FROM products", [], (err, rows) => {
-        const productCards = rows.map(p => `
-            <div class="product-card">
-                <h3>${p.name}</h3>
-                <p>${p.price} PLN</p>
-                <button class="btn">Kup teraz</button>
-            </div>
-        `).join('');
-        
-        const sklepPath = path.join(publicPath, 'sklep.html');
-        if (fs.existsSync(sklepPath)) {
-            let html = fs.readFileSync(sklepPath, 'utf8');
-            res.send(html.replace('', productCards || '<p>Brak produktów.</p>'));
-        } else {
-            res.status(404).send("Błąd: Brak pliku sklep.html");
-        }
-    });
-});
-
-// Pozostałe trasy (Login/Admin) zostawiam bez zmian...
-app.get('/login', (req, res) => {
-    res.send('<html><head><link rel="stylesheet" href="style.css"></head><body><div class="container" style="max-width:400px;margin-top:100px;"><div class="product-card"><h2>Logowanie Admin</h2><form action="/login" method="POST"><input name="u" placeholder="Login"><input type="password" name="p" placeholder="Hasło"><button class="btn">Zaloguj</button></form></div></div></body></html>');
-});
-
-app.post('/login', (req, res) => {
-    if(req.body.u === 'admin' && req.body.p === 'admin123') {
-        req.session.isAdmin = true;
-        res.redirect('/admin');
-    } else { res.send('Błąd logowania!'); }
-});
+// --- PANEL ADMINA Z MOŻLIWOŚCIĄ DODAWANIA ---
 
 app.get('/admin', (req, res) => {
     if(!req.session.isAdmin) return res.redirect('/login');
+    
     db.all("SELECT * FROM requests", (err, reqs) => {
         db.all("SELECT * FROM products", (err, prods) => {
-            const rList = reqs.map(r => `<li>${r.client}: ${r.car}</li>`).join('');
-            res.send(`<h2>Panel Admina</h2><ul>${rList}</ul><a href="/logout">Wyloguj</a>`);
+            const rList = reqs.map(r => `<li>🚗 <b>${r.car}</b> - Klient: ${r.client} <br> <i>${r.desc}</i></li>`).join('');
+            const pList = prods.map(p => `<li>📦 ${p.name} - ${p.price} PLN</li>`).join('');
+
+            res.send(`
+                <html>
+                <head><link rel="stylesheet" href="style.css"></head>
+                <body style="padding:20px; font-family: sans-serif;">
+                    <h1>🛠 Panel Zarządzania Warsztatem</h1>
+                    <a href="/logout" style="color:red">Wyloguj się</a>
+                    <hr>
+
+                    <div style="display: flex; gap: 40px;">
+                        <div class="product-card" style="flex: 1;">
+                            <h2>Dodaj produkt do sklepu</h2>
+                            <form action="/admin/add-product" method="POST">
+                                <input name="name" placeholder="Nazwa części" required><br><br>
+                                <input name="price" type="number" step="0.01" placeholder="Cena (PLN)" required><br><br>
+                                <textarea name="desc" placeholder="Opis..."></textarea><br><br>
+                                <button class="btn" type="submit">Dodaj do sklepu</button>
+                            </form>
+                            <h3>Aktualny asortyment:</h3>
+                            <ul>${pList || 'Brak produktów'}</ul>
+                        </div>
+
+                        <div class="product-card" style="flex: 1;">
+                            <h2>Zlecenia i Zgłoszenia</h2>
+                            <form action="/admin/add-request" method="POST">
+                                <input name="client" placeholder="Imię i nazwisko" required><br><br>
+                                <input name="car" placeholder="Model auta" required><br><br>
+                                <textarea name="desc" placeholder="Co jest do naprawy?"></textarea><br><br>
+                                <button class="btn" type="submit" style="background:#28a745">Dodaj zlecenie ręcznie</button>
+                            </form>
+                            <h3>Lista do zrobienia:</h3>
+                            <ul>${rList || 'Brak zgłoszeń'}</ul>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
         });
     });
 });
 
-app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
+// --- OBSŁUGA FORMULARZY (LOGIKA BAZY) ---
 
-// Port dla Render
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Serwer działa na porcie ${port}`));
+// Dodawanie produktu
+app.post('/admin/add-product', (req, res) => {
+    if(!req.session.isAdmin) return res.status(403).send('Brak dostępu');
+    const { name, price, desc } = req.body;
+    db.run("INSERT INTO products (name, price, desc) VALUES (?, ?, ?)", [name, price, desc], (err) => {
+        res.redirect('/admin'); // Odśwież panel po dodaniu
+    });
+});
+
+// Dodawanie zgłoszenia
+app.post('/admin/add-request', (req, res) => {
+    if(!req.session.isAdmin) return res.status(403).send('Brak dostępu');
+    const { client, car, desc } = req.body;
+    db.run("INSERT INTO requests (client, car, desc) VALUES (?, ?, ?)", [client, car, desc], (err) => {
+        res.redirect('/admin'); // Odśwież panel po dodaniu
+    });
+});
