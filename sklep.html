@@ -3,47 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
-    <title>Sklep - Auto-Spec</title>
+    <title>Sklep Części</title>
 </head>
 <body>
-    <nav>
-        <a href="/">Start</a>
-        <a href="/sklep">Sklep</a>
-        <div id="cart-counter" style="color:yellow; font-weight:bold; display:inline; margin-left:20px;">🛒 Koszyk: 0</div>
-    </nav>
-    <header><h1>Sklep Części</h1></header>
-
+    <nav><a href="/">Start</a> <a href="/sklep">Sklep</a></nav>
+    <header><h1>Sklep z częściami</h1></header>
     <div class="container">
         <div class="products-grid">
             </div>
     </div>
-
-    <div id="cart-panel" class="card" style="position:fixed; bottom:20px; right:20px; width:250px; display:none;">
-        <h3>Twoje zakupy:</h3>
-        <ul id="cart-items"></ul>
-        <p>Razem: <span id="cart-total">0</span> PLN</p>
-        <button class="btn" onclick="alert('Przekierowanie do płatności...')">Kupuję</button>
-        <button class="btn" style="background:gray; margin-top:5px;" onclick="clearCart()">Wyczyść</button>
-    </div>
-
-    <script>
-        let cart = [];
-        function addToCart(name, price) {
-            cart.push({name, price});
-            updateCart();
-        }
-        function updateCart() {
-            document.getElementById('cart-counter').innerText = "🛒 Koszyk: " + cart.length;
-            const itemsList = document.getElementById('cart-items');
-            itemsList.innerHTML = cart.map(i => `<li>${i.name} - ${i.price} zł</li>`).join('');
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('cart-total').innerText = total.toFixed(2);
-            document.getElementById('cart-panel').style.display = cart.length > 0 ? 'block' : 'none';
-        }
-        function clearCart() {
-            cart = [];
-            updateCart();
-        }
-    </script>
 </body>
 </html>
