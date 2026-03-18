@@ -3,33 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
-    <title>Auto-Spec Warsztat</title>
+    <title>Auto-Spec</title>
 </head>
 <body>
-    <nav>
-        <a href="/">Strona Główna</a>
-        <a href="/sklep">Sklep</a>
-        <a href="/login">Admin</a>
-    </nav>
-    <header>
-        <h1>Auto-Spec Warsztat</h1>
-        <p>Szybkie naprawy, pewne części</p>
-    </header>
+    <nav><a href="/">Start</a> <a href="/sklep">Sklep</a> <a href="/login">Admin</a></nav>
+    <header><h1>Auto-Spec Warsztat</h1></header>
     <div class="container">
         <div class="card">
-            <h2>Zgłoś auto do serwisu</h2>
+            <h2>Zgłoś auto do naprawy</h2>
             <form action="/add-request-client" method="POST">
                 <input type="text" name="client" placeholder="Imię i Nazwisko" required>
-                <input type="text" name="car" placeholder="Marka i Model (np. VW Golf)" required>
-                <input type="text" name="vin" placeholder="VIN (opcjonalnie)">
+                <input type="text" name="car" placeholder="Auto (np. Audi A3)" required>
+                <input type="text" name="vin" placeholder="Numer VIN">
                 <input type="tel" name="phone" placeholder="Telefon" required>
                 <select name="service_type">
                     <option value="Mechanika">Mechanika</option>
-                    <option value="Serwis Olejowy">Serwis Olejowy</option>
-                    <option value="Klimatyzacja">Klimatyzacja</option>
+                    <option value="Olej">Olej i Filtry</option>
+                    <option value="Klima">Klimatyzacja</option>
                 </select>
-                <textarea name="desc" placeholder="Opis usterki..."></textarea>
-                <button type="submit" class="btn">Wyślij zgłoszenie</button>
+                <textarea name="desc" placeholder="Opis problemu..."></textarea>
+                <button type="submit" class="btn">Wyślij Zgłoszenie</button>
             </form>
         </div>
     </div>
