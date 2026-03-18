@@ -4,113 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Sklep Części | Auto-Spec</title>
+    <title>Sklep | Auto-Spec</title>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <span style="color:white; font-size:1.4em; font-weight:bold;">🛠 AUTO-SPEC</span>
-            <div class="links">
-                <a href="/">Serwis</a>
-                <a href="/sklep">Sklep Części</a>
-                <div id="cart-counter" style="color:var(--accent); font-weight:bold; display:inline; margin-left:15px;">🛒 [0]</div>
-            </div>
-        </div>
-    </nav>
-
-    <header>
-        <h1>Sklep z częściami</h1>
-        <p>Sprawdzone podzespoły z gwarancją jakości.</p>
-    </header>
-
-    <div class="container">
-        <div class="products-grid">
-            </div>
-    </div>
-
+    <nav><div class="nav-container"><b style="color:white; font-size:1.2em;">🛠 AUTO-SPEC</b><div><a href="/">Serwis</a><a href="/sklep">Sklep</a><span id="cart-counter" style="color:var(--accent); margin-left:15px; font-weight:bold;">🛒 [0]</span></div></div></nav>
+    <header><h1>Części Zamienne</h1><p>Najwyższa jakość w dobrych cenach.</p></header>
+    <div class="container"><div class="products-grid"></div></div>
     <div id="cart-panel" style="display:none;">
-        <h3 style="margin-top:0; color:var(--primary);">Twoje zakupy:</h3>
-        <ul id="cart-items" style="list-style:none; padding:0; max-height:150px; overflow-y:auto; border-bottom:1px solid #eee; margin-bottom:10px;"></ul>
-        <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:15px;">
-            <span>Razem:</span>
-            <span><span id="cart-total">0</span> PLN</span>
-        </div>
-        <button class="btn" style="width:100%; margin-bottom:5px;" onclick="alert('Przekierowanie do płatności...')">Kupuję</button>
-        <button class="btn btn-danger" style="width:100%; padding: 8px; font-size: 0.9em;" onclick="clearCart()">Wyczyść</button>
+        <h3 style="margin-top:0;">Twój Koszyk</h3>
+        <ul id="cart-items" style="list-style:none; padding:0; margin-bottom:15px; border-bottom:1px solid #eee;"></ul>
+        <p>Razem: <b><span id="cart-total">0.00</span> PLN</b></p>
+        <button class="btn" style="margin-bottom:5px;" onclick="alert('Przejście do kasy...')">Zamów</button>
+        <button class="btn btn-danger" onclick="clearCart()">Wyczyść</button>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>🛠 AUTO-SPEC Babice</h4>
-                <p>Ulica Warsztatowa 1, 32-551 Babice</p>
-            </div>
-            <div class="footer-section">
-                <h4>Kontakt Sklep</h4>
-                <p>📞 Telefon: +48 987 654 321</p>
-                <p>📧 Email: sklep@auto-spec.pl</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2026 Auto-Spec Warsztat. Wszelkie prawa zastrzeżone.
-        </div>
-    </footer>
-
     <script>
         let cart = [];
-
         function addToCart(id, name, price, quantity) {
             const qty = parseInt(quantity);
-            if (qty < 1) return;
-
-            // Sprawdzamy czy produkt już jest w koszyku
-            const existingIndex = cart.findIndex(item => item.id === id);
-            
-            if (existingIndex > -1) {
-                cart[existingIndex].qty += qty;
-            } else {
-                cart.push({ id, name, price, qty });
-            }
-            
+            if(qty < 1) return;
+            const idx = cart.findIndex(i => i.id === id);
+            if(idx > -1) cart[idx].qty += qty;
+            else cart.push({id, name, price, qty});
             updateCart();
-            // Mała animacja licznika
-            const counter = document.getElementById('cart-counter');
-            counter.style.transform = 'scale(1.2)';
-            setTimeout(() => counter.style.transform = 'scale(1)', 200);
         }
-
-        // NOWA FUNKCJA USUWANIA JEDNEGO PRZEDMIOTU
         function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
+            cart = cart.filter(i => i.id !== id);
             updateCart();
         }
-
         function updateCart() {
-            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-            document.getElementById('cart-counter').innerText = "🛒 [" + totalCount + "]";
-            
-            const itemsList = document.getElementById('cart-items');
-            itemsList.innerHTML = cart.map(i => `
-                <li style="display:flex; justify-content:space-between; align-items:center; font-size:0.85em; margin-bottom:8px; background:#f9f9f9; padding:5px; border-radius:4px;">
-                    <div>
-                        <b>${i.qty}x</b> ${i.name}<br>
-                        <span style="color:#666;">${(i.price * i.qty).toFixed(2)} zł</span>
-                    </div>
-                    <button onclick="removeFromCart('${i.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.2em;">&times;</button>
+            const count = cart.reduce((s, i) => s + i.qty, 0);
+            const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            document.getElementById('cart-counter').innerText = "🛒 [" + count + "]";
+            document.getElementById('cart-total').innerText = total.toFixed(2);
+            document.getElementById('cart-panel').style.display = cart.length > 0 ? 'block' : 'none';
+            document.getElementById('cart-items').innerHTML = cart.map(i => `
+                <li style="font-size:0.85em; margin-bottom:8px; display:flex; justify-content:space-between;">
+                    <span>${i.qty}x ${i.name}</span>
+                    <button onclick="removeFromCart(${i.id})" style="border:none; color:red; cursor:pointer; background:none;">X</button>
                 </li>
             `).join('');
-            
-            const totalMoney = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            document.getElementById('cart-total').innerText = totalMoney.toFixed(2);
-            document.getElementById('cart-panel').style.display = cart.length > 0 ? 'block' : 'none';
         }
-
-        function clearCart() {
-            if(confirm('Wyczyścić cały koszyk?')) {
-                cart = [];
-                updateCart();
-            }
-        }
+        function clearCart() { cart = []; updateCart(); }
     </script>
 </body>
 </html>
