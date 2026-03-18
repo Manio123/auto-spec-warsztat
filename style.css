@@ -1,12 +1,180 @@
-body { font-family: sans-serif; margin: 0; background: #f0f2f5; }
-nav { background: #333; padding: 15px; text-align: center; }
-nav a { color: white; text-decoration: none; margin: 0 15px; }
-header { background: #007bff; color: white; padding: 30px; text-align: center; }
-.container { max-width: 900px; margin: 20px auto; padding: 20px; }
-.card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-input, select, textarea { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-.btn { background: #007bff; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; width: 100%; }
-.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-.product-card { background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.price { color: #28a745; font-weight: bold; }
-.req-item { background: white; padding: 10px; margin-bottom: 10px; border-left: 4px solid #007bff; }
+:root {
+    --primary: #1a3c61; /* Ciemnoniebieski warsztatowy */
+    --accent: #f0c04a;  /* Złoty/żółty ostrzegawczy */
+    --dark: #2c3e50;
+    --light: #ecf0f1;
+    --white: #ffffff;
+    --danger: #e74c3c;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9;
+    color: var(--dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Nawigacja --- */
+nav {
+    background: var(--dark);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+nav .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+nav a {
+    color: var(--white);
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+nav a:hover { color: var(--accent); }
+
+/* --- Nagłówek --- */
+header {
+    background: linear-gradient(rgba(26, 60, 97, 0.85), rgba(44, 62, 80, 0.9)), 
+                url('https://images.unsplash.com/photo-1517672651691-24622a91b550?q=80&w=1600') center/cover;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+    border-bottom: 5px solid var(--accent);
+}
+
+header h1 { margin: 0; font-size: 3em; text-transform: uppercase; letter-spacing: 2px; }
+header p { margin: 10px 0 0; font-size: 1.2em; opacity: 0.9; }
+
+/* --- Główny Kontener --- */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    flex: 1; /* Spycha stopkę na dół */
+}
+
+/* --- Karty i Formularze --- */
+.card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+h2 { border-left: 5px solid var(--primary); padding-left: 15px; margin-top: 0; color: var(--primary); }
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 5px rgba(26,60,97,0.2); }
+
+.btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn:hover { background: var(--dark); transform: translateY(-2px); }
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #c0392b; }
+
+/* --- Sklep --- */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+
+.product-card img { width: 100%; height: 200px; object-fit: cover; }
+
+.product-details { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+
+.price { color: var(--success, #27ae60); font-size: 1.4em; font-weight: bold; margin: 10px 0; }
+
+/* --- Admin i Koszyk --- */
+.req-item {
+    background: white;
+    border-left: 5px solid var(--primary);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+#cart-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    border-top: 4px solid var(--accent);
+    z-index: 2000;
+}
+
+/* --- Stopka --- */
+footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.8);
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 5px solid var(--primary);
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    text-align: left;
+}
+
+.footer-section h4 { color: var(--accent); margin-top: 0; text-transform: uppercase; }
+.footer-bottom { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-size: 0.9em; }
