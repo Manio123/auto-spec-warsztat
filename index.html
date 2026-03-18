@@ -2,34 +2,42 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Auto-Spec | Serwis</title>
     <link rel="stylesheet" href="style.css">
+    <title>Auto-Spec Warsztat</title>
 </head>
 <body>
+    <nav>
+        <a href="/">Strona Główna</a>
+        <a href="/sklep">Sklep z częściami</a>
+        <a href="/login">Panel Admina</a>
+    </nav>
+
     <header>
-        <nav>
-            <a href="/" class="logo">Auto-<span>Spec</span></a>
-            <ul>
-                <li><a href="/">Serwis</a></li>
-                <li><a href="/sklep">Sklep</a></li>
-                <li><a href="/login">Panel Admina</a></li>
-            </ul>
-        </nav>
+        <h1>Witamy w Auto-Spec</h1>
+        <p>Twoje auto w dobrych rękach</p>
     </header>
-    <section class="hero">
-        <h1>Profesjonalny Serwis Mechaniczny</h1>
-        <p>Twoje auto w rękach ekspertów.</p>
-    </section>
-    <div class="container">
-        <h2>Umów wizytę</h2>
-        <div class="product-card" style="max-width: 500px; margin: auto;">
-            <form action="/book-service" method="POST">
-                <input name="client" placeholder="Imię, Nazwisko i Telefon" required>
-                <input name="car" placeholder="Model auta i rok" required>
+
+    <section class="container">
+        <h2>Zgłoś naprawę online</h2>
+        <div class="product-card">
+            <form action="/add-request-client" method="POST">
+                <input type="text" name="client" placeholder="Imię i Nazwisko" required>
+                <input type="text" name="car" placeholder="Marka i Model auta" required>
+                <input type="text" name="vin" placeholder="Numer VIN (opcjonalnie)">
+                <input type="tel" name="phone" placeholder="Twój numer telefonu" required>
+                
+                <label>Typ usługi:</label>
+                <select name="service_type">
+                    <option value="Mechanika">Mechanika ogólna</option>
+                    <option value="Olej">Wymiana oleju</option>
+                    <option value="Klima">Klimatyzacja</option>
+                    <option value="Inne">Inne</option>
+                </select>
+
                 <textarea name="desc" placeholder="Opis usterki..."></textarea>
-                <button type="submit" class="btn">Wyślij zgłoszenie</button>
+                <button type="submit" class="btn">Wyślij zgłoszenie do mechanika</button>
             </form>
         </div>
-    </div>
+    </section>
 </body>
 </html>
