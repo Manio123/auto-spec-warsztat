@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Auto-Spec | Serwis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">Auto-<span>Spec</span></a>
+            <ul>
+                <li><a href="/">Serwis</a></li>
+                <li><a href="/sklep">Sklep</a></li>
+                <li><a href="/login">Panel Admina</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="hero">
+        <h1>Profesjonalny Serwis Mechaniczny</h1>
+        <p>Twoje auto w rękach ekspertów.</p>
+    </section>
+    <div class="container">
+        <h2>Umów wizytę</h2>
+        <div class="product-card" style="max-width: 500px; margin: auto;">
+            <form action="/book-service" method="POST">
+                <input name="client" placeholder="Imię, Nazwisko i Telefon" required>
+                <input name="car" placeholder="Model auta i rok" required>
+                <textarea name="desc" placeholder="Opis usterki..."></textarea>
+                <button type="submit" class="btn">Wyślij zgłoszenie</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
