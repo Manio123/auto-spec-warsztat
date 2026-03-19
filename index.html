@@ -4,34 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Auto-Spec | Serwis</title>
+    <title>Auto-Spec | Serwis Samochodowy</title>
 </head>
 <body>
-    <nav><div class="nav-container"><b style="color:white; font-size:1.2em;">🛠 AUTO-SPEC</b><div><a href="/">Serwis</a><a href="/sklep">Sklep</a><a href="/login">Admin</a></div></div></nav>
-    <header><h1>Serwis Samochodowy</h1><p>Szybkie terminy, profesjonalna obsługa.</p></header>
+    <nav><div class="nav-container"><b style="color:white; font-size:1.4em;">🛠 AUTO-SPEC</b><div><a href="/">Serwis</a><a href="/sklep">Sklep</a><a href="/login">Admin</a></div></div></nav>
+    <header><h1>Profesjonalny Serwis</h1><p>Umów się na wizytę online w 30 sekund.</p></header>
     <div class="container">
         <div class="card">
-            <h2>Umów wizytę online</h2>
+            <h2>Zgłoś auto do naprawy</h2>
             <form action="/add-request-client" method="POST">
                 <input type="text" name="client" placeholder="Imię i Nazwisko" required>
-                <input type="tel" name="phone" placeholder="Telefon kontaktowy" required>
-                <input type="text" name="car" placeholder="Auto (np. Audi A4)" required>
+                <input type="tel" name="phone" placeholder="Twój telefon" required>
+                <input type="text" name="car" placeholder="Marka i Model (np. Audi A4)" required>
                 <input type="text" name="vin" placeholder="Numer VIN">
                 <select name="service_type">
-                    <option value="Mechanika">Mechanika ogólna</option>
-                    <option value="Olej">Serwis olejowy</option>
-                    <option value="Klima">Klimatyzacja</option>
+                    <option value="Mechanika Ogólna">Mechanika Ogólna</option>
+                    <option value="Olej i Filtry">Olej i Filtry</option>
+                    <option value="Klimatyzacja">Klimatyzacja</option>
                 </select>
-                <textarea name="desc" placeholder="Opis problemu..."></textarea>
-                <button type="submit" class="btn">Wyślij zgłoszenie</button>
+                <textarea name="desc" placeholder="Opis usterki..."></textarea>
+                <button type="submit" class="btn">Wyślij Zgłoszenie</button>
             </form>
         </div>
     </div>
     <footer>
         <div class="footer-grid">
-            <div><h4>Kontakt</h4><p>📞 +48 123 456 789</p><p>📧 biuro@auto-spec.pl</p></div>
-            <div><h4>Adres</h4><p>ul. Warsztatowa 1</p><p>32-551 Babice</p></div>
-            <div><h4>Godziny</h4><p>Pn-Pt: 8:00 - 17:00</p></div>
+            <div><h4 style="color:var(--accent);">KONTAKT</h4><p>📞 +48 123 456 789</p><p>📧 serwis@auto-spec.pl</p></div>
+            <div><h4 style="color:var(--accent);">ADRES</h4><p>ul. Warsztatowa 1</p><p>32-551 Babice</p></div>
+            <div><h4 style="color:var(--accent);">GODZINY</h4><p>Pn-Pt: 8:00 - 17:00</p><p>Sob: 9:00 - 13:00</p></div>
         </div>
     </footer>
 </body>
