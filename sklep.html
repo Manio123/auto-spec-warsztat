@@ -9,59 +9,49 @@
 <body>
     <nav>
         <div class="nav-container">
-            <b style="color:white; font-size:1.2em;">🛠 AUTO-SPEC</b>
+            <b style="color:white; font-size:1.4em;">🛠 AUTO-SPEC</b>
             <div>
                 <a href="/">Serwis</a>
                 <a href="/sklep">Sklep</a>
-                <span id="cart-counter" style="color:#f0c04a; margin-left:15px; font-weight:bold;">🛒 [0]</span>
+                <span id="cart-counter" style="color:var(--accent); font-weight:bold; margin-left:15px;">🛒 [0]</span>
             </div>
         </div>
     </nav>
 
-    <header>
-        <h1>Sklep Części Zamiennych</h1>
-        <p>Gwarancja jakości i szybkiej wysyłki</p>
-    </header>
+    <header><h1>Sklep Części</h1><p>Oryginalne podzespoły z gwarancją.</p></header>
 
     <div class="container">
         <div class="products-grid">
             </div>
     </div>
 
-    <div id="cart-panel" style="display:none;">
-        <h3 style="margin-top:0;">🛒 Twój Koszyk</h3>
-        <ul id="cart-items" style="list-style:none; padding:0; margin-bottom:15px; border-bottom:1px solid #eee;"></ul>
-        <p>Razem: <b><span id="cart-total">0.00</span> PLN</b></p>
-        <button class="btn" style="margin-bottom:5px;" onclick="alert('Dziękujemy! System zamówień zostanie wkrótce uruchomiony.')">Zamów teraz</button>
-        <button class="btn" style="background:#666;" onclick="clearCart()">Wyczyść</button>
+    <div id="cart-panel" class="card" style="position:fixed; bottom:20px; right:20px; width:300px; z-index:2000; border-top: 5px solid var(--accent);">
+        <h3 style="margin-top:0;">🛒 Koszyk <span id="cart-status" style="font-size:0.7em; color:#999;">(Pusty)</span></h3>
+        
+        <div id="cart-empty-msg" style="padding:10px 0; color:#999; font-style:italic;">Brak części w koszyku.</div>
+
+        <ul id="cart-items" style="list-style:none; padding:0; margin-bottom:15px; max-height:200px; overflow-y:auto; display:none;"></ul>
+
+        <div id="cart-summary" style="display:none; border-top:1px solid #eee; padding-top:10px;">
+            <p>Suma: <b><span id="cart-total">0.00</span> PLN</b></p>
+            <button class="btn" style="margin-bottom:5px;" onclick="alert('Zamówienie wysłane do serwisu!')">ZAMÓW</button>
+            <button class="btn btn-danger" style="padding:8px; font-size:0.8em;" onclick="clearCart()">WYCZYŚĆ</button>
+        </div>
     </div>
 
     <footer>
-        <div class="footer-grid" style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; text-align:left;">
-            <div>
-                <h4 style="color:#f0c04a;">KONTAKT</h4>
-                <p>📞 +48 123 456 789</p>
-                <p>📧 sklep@auto-spec.pl</p>
-            </div>
-            <div>
-                <h4 style="color:#f0c04a;">LOKALIZACJA</h4>
-                <p>ul. Warsztatowa 1</p>
-                <p>32-551 Babice</p>
-            </div>
-            <div>
-                <h4 style="color:#f0c04a;">GODZINY</h4>
-                <p>Pn-Pt: 8:00 - 17:00</p>
-                <p>Sob: 9:00 - 13:00</p>
-            </div>
+        <div class="footer-grid">
+            <div><h4 style="color:var(--accent);">SKLEP</h4><p>📞 +48 987 654 321</p><p>📧 sklep@auto-spec.pl</p></div>
+            <div><h4 style="color:var(--accent);">DOSTAWA</h4><p>Wysyłka w 24h</p><p>Odbiór osobisty: Babice</p></div>
+            <div><h4 style="color:var(--accent);">ADRES</h4><p>ul. Warsztatowa 1, Babice</p></div>
         </div>
-        <div style="margin-top:30px; opacity:0.6; font-size:0.8em; text-align:center;">&copy; 2026 Auto-Spec Warsztat & Sklep</div>
     </footer>
 
     <script>
         let cart = [];
         function addToCart(id, name, price, quantity) {
             const qty = parseInt(quantity);
-            if(qty < 1) return;
+            if(isNaN(qty) || qty < 1) return;
             const idx = cart.findIndex(i => i.id === id);
             if(idx > -1) cart[idx].qty += qty;
             else cart.push({id, name, price, qty});
@@ -74,17 +64,35 @@
         function updateCart() {
             const count = cart.reduce((s, i) => s + i.qty, 0);
             const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            
             document.getElementById('cart-counter').innerText = "🛒 [" + count + "]";
             document.getElementById('cart-total').innerText = total.toFixed(2);
-            document.getElementById('cart-panel').style.display = cart.length > 0 ? 'block' : 'none';
-            document.getElementById('cart-items').innerHTML = cart.map(i => `
-                <li style="font-size:0.85em; margin-bottom:8px; display:flex; justify-content:space-between; background:#f9f9f9; padding:5px; border-radius:4px;">
-                    <span>${i.qty}x ${i.name}</span>
-                    <button onclick="removeFromCart(${i.id})" style="border:none; color:red; cursor:pointer; background:none; font-weight:bold;">X</button>
-                </li>
-            `).join('');
+            
+            const list = document.getElementById('cart-items');
+            const empty = document.getElementById('cart-empty-msg');
+            const summary = document.getElementById('cart-summary');
+            const status = document.getElementById('cart-status');
+
+            if(cart.length > 0) {
+                empty.style.display = 'none';
+                list.style.display = 'block';
+                summary.style.display = 'block';
+                status.innerText = "(" + count + " szt.)";
+                status.style.color = "var(--primary)";
+                list.innerHTML = cart.map(i => `
+                    <li style="display:flex; justify-content:space-between; align-items:center; font-size:0.85em; background:#f9f9f9; padding:8px; border-radius:4px; margin-bottom:5px; border:1px solid #eee;">
+                        <div><b>${i.qty}x</b> ${i.name}<br><small>${(i.price * i.qty).toFixed(2)} zł</small></div>
+                        <button onclick="removeFromCart(${i.id})" style="border:none; color:red; cursor:pointer; background:none; font-size:1.2em;">&times;</button>
+                    </li>
+                `).join('');
+            } else {
+                empty.style.display = 'block';
+                list.style.display = 'none';
+                summary.style.display = 'none';
+                status.innerText = "(Pusty)";
+            }
         }
-        function clearCart() { cart = []; updateCart(); }
+        function clearCart() { if(confirm('Wyczyścić?')) { cart = []; updateCart(); } }
     </script>
 </body>
 </html>
