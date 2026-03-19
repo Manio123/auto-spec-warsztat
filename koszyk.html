@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Twój Koszyk | Auto-Spec</title>
+</head>
+<body>
+    <nav><div class="nav-container"><b style="color:white;">🛠 AUTO-SPEC</b><div><a href="/">Serwis</a><a href="/sklep">Sklep</a></div></div></nav>
+    
+    <div class="container">
+        <div class="card">
+            <h2>🛒 Twój Koszyk</h2>
+            <div id="cart-content">
+                </div>
+            <hr>
+            <div style="text-align:right;">
+                <h3>Suma: <span id="total-price">0.00</span> PLN</h3>
+                <button class="btn" style="width:200px;" onclick="alert('Zamówienie wysłane!')">Zamawiam</button>
+                <button class="btn" style="width:200px; background:#666; margin-top:10px;" onclick="clearCart()">Wyczyść koszyk</button>
+            </div>
+        </div>
+    </div>
+
+    <footer><div class="footer-grid"><div><p>ul. Warsztatowa 1, 32-551 Babice</p></div></div></footer>
+
+    <script>
+        function renderCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const container = document.getElementById('cart-content');
+            let total = 0;
+
+            if(cart.length === 0) {
+                container.innerHTML = "<h3>Twój koszyk jest pusty.</h3><a href='/sklep'>Wróć do sklepu</a>";
+                document.getElementById('total-price').innerText = "0.00";
+                return;
+            }
+
+            container.innerHTML = cart.map(i => {
+                total += (i.price * i.qty);
+                return `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #eee;">
+                    <div><b>${i.name}</b><br><small>Cena: ${i.price.toFixed(2)} zł</small></div>
+                    <div>
+                        Ilość: <b>${i.qty}</b> 
+                        <button onclick="removeItem(${i.id})" style="margin-left:20px; color:red; border:none; background:none; cursor:pointer;">Usuń</button>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('total-price').innerText = total.toFixed(2);
+        }
+
+        function removeItem(id) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(i => i.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function clearCart() {
+            localStorage.removeItem('cart');
+            renderCart();
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>
