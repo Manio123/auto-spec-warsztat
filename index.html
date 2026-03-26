@@ -4,35 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Auto-Spec | Warsztat</title>
+    <title>Auto-Spec | Serwis</title>
 </head>
 <body>
     <nav>
         <div class="nav-container">
-            <b style="color:white; font-size:1.2em;">🛠 AUTO-SPEC</b>
+            <b style="color:white; font-size:1.4em;">🛠 AUTO-SPEC</b>
             <div>
                 <a href="/">Serwis</a>
                 <a href="/sklep">Sklep</a>
-                <a href="/login" style="background:rgba(255,255,255,0.1); padding:5px 10px; border-radius:4px;">🔑 Admin</a>
+                <a href="/login" class="admin-link">Panel Admina</a>
             </div>
         </div>
     </nav>
-    <header><h1>Profesjonalny Serwis</h1><p>Szybkie terminy, pewna naprawa.</p></header>
+    <header><h1>Serwis Samochodowy</h1><p>Profesjonalna naprawa Twojego auta.</p></header>
     <div class="container">
         <div class="card">
-            <h2>Umów wizytę</h2>
+            <h2>Umów wizytę online</h2>
             <form action="/add-request-client" method="POST">
                 <input type="text" name="client" placeholder="Imię i Nazwisko" required>
                 <input type="tel" name="phone" placeholder="Twój Telefon" required>
                 <input type="text" name="car" placeholder="Marka i Model auta" required>
-                <input type="text" name="vin" placeholder="Numer VIN (opcjonalnie)">
+                <input type="text" name="vin" placeholder="Numer VIN">
                 <select name="service_type">
-                    <option value="Naprawa Mechaniczna">Naprawa Mechaniczna</option>
-                    <option value="Przegląd/Olej">Przegląd / Olej</option>
-                    <option value="Klimatyzacja">Klimatyzacja</option>
+                    <option value="Mechanika">Mechanika Ogólna</option>
+                    <option value="Olej">Wymiana Oleju</option>
+                    <option value="Klima">Serwis Klimatyzacji</option>
                 </select>
-                <textarea name="desc" placeholder="Opisz co dzieje się z autem..."></textarea>
-                <button type="submit" class="btn">Wyślij Zgłoszenie</button>
+                <textarea name="desc" placeholder="Opis usterki..."></textarea>
+                <button type="submit" class="btn">Wyślij zgłoszenie</button>
             </form>
         </div>
     </div>
