@@ -3,28 +3,25 @@
     --accent: #f0c04a;
     --dark: #2c3e50;
     --light: #f4f6f9;
-    --white: #ffffff;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     margin: 0;
+    background: var(--light);
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Wymusza, by stopka była na dole nawet przy małej ilości treści */
-    background-color: var(--light);
-    color: #333;
+    min-height: 100vh;
 }
 
 /* NAWIGACJA */
 nav {
-    background-color: var(--dark);
+    background: var(--dark);
     padding: 15px 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .nav-container {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -32,47 +29,40 @@ nav {
 }
 
 nav a {
-    color: var(--white);
+    color: white;
     text-decoration: none;
-    margin-left: 20px;
-    font-weight: 500;
-    transition: color 0.3s;
+    margin-left: 15px;
+    font-weight: bold;
 }
 
-nav a:hover {
-    color: var(--accent);
-}
-
-.admin-link {
+.admin-btn {
     background: var(--accent);
     color: var(--primary) !important;
-    padding: 6px 12px;
+    padding: 5px 12px;
     border-radius: 4px;
-    font-weight: bold;
 }
 
 /* NAGŁÓWEK */
 header {
-    background: linear-gradient(rgba(26, 60, 97, 0.8), rgba(26, 60, 97, 0.8)), 
-                url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=2000') center/cover;
-    color: var(--white);
-    padding: 60px 20px;
+    background: var(--primary);
+    color: white;
+    padding: 50px 20px;
     text-align: center;
 }
 
-/* KONTENER I KARTY */
+/* KONTENER */
 .container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
-    flex: 1; /* To sprawia, że kontener zajmuje wolną przestrzeń i wypycha stopkę */
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    flex: 1;
 }
 
 .card {
-    background: var(--white);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* FORMULARZE */
@@ -81,76 +71,61 @@ input, select, textarea {
     padding: 12px;
     margin: 10px 0;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 4px;
     box-sizing: border-box;
-    font-size: 1rem;
 }
 
 .btn {
-    background-color: var(--primary);
-    color: var(--white);
+    background: var(--primary);
+    color: white;
     border: none;
-    padding: 15px;
-    border-radius: 5px;
+    padding: 12px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
     width: 100%;
-    font-size: 1rem;
-    transition: background 0.3s;
 }
 
-.btn:hover {
-    background-color: #245285;
-}
-
-/* SKLEP - GRID PRODUKTÓW */
+/* SKLEP */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
 }
 
 .product-card {
-    background: var(--white);
+    background: white;
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid #eee;
-    transition: transform 0.3s;
+    text-align: center;
+    transition: 0.3s;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-}
+.product-card:hover { transform: translateY(-5px); }
 
 .product-card img {
     width: 100%;
-    height: 180px;
+    height: 160px;
     object-fit: cover;
-}
-
-.product-details {
-    padding: 15px;
-    text-align: center;
 }
 
 .price {
     color: #27ae60;
-    font-size: 1.3rem;
+    font-size: 1.2em;
     font-weight: bold;
-    margin: 10px 0;
 }
 
-/* --- POPRAWIONA STOPKA Z DANYMI --- */
+/* STOPKA */
 footer {
-    background-color: var(--dark);
-    color: var(--white);
+    background: var(--dark);
+    color: white;
     padding: 40px 20px;
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .footer-container {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -159,24 +134,13 @@ footer {
 
 .footer-section h4 {
     color: var(--accent);
-    margin-bottom: 20px;
     border-bottom: 2px solid var(--accent);
     display: inline-block;
-    padding-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .footer-section p {
-    margin: 8px 0;
-    line-height: 1.6;
-    font-size: 0.95rem;
+    margin: 5px 0;
+    font-size: 0.9em;
     color: #ccc;
-}
-
-.footer-bottom {
-    text-align: center;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #444;
-    font-size: 0.85rem;
-    color: #888;
 }
