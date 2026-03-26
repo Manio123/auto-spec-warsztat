@@ -9,50 +9,40 @@ const app = express();
 const dbPath = path.join(__dirname, 'warsztat.db');
 const db = new sqlite3.Database(dbPath);
 
-// Inicjalizacja bazy
+// Inicjalizacja tabel
 db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL, desc TEXT, imgUrl TEXT)");
     db.run("CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, client TEXT, phone TEXT, car TEXT, vin TEXT, service_type TEXT, desc TEXT)");
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'auto-spec-2026-key', resave: false, saveUninitialized: true }));
+app.use(session({ secret: 'auto-spec-secret-2026', resave: false, saveUninitialized: true }));
 
-// Wykrywanie ścieżki (naprawa błędu ze zdjęcia)
-const rootPath = __dirname;
+// Wykrywanie folderu z plikami (naprawa błędu ENOENT ze screena)
 const publicPath = fs.existsSync(path.join(__dirname, 'public')) ? path.join(__dirname, 'public') : __dirname;
 app.use(express.static(publicPath));
 
-function sendFileSafe(res, fileName) {
-    const filePath = path.join(publicPath, fileName);
-    if (fs.existsSync(filePath)) res.sendFile(filePath);
-    else res.status(404).send(`Nie znaleziono pliku ${fileName}. Sprawdź czy jest w głównym folderze lub w /public`);
-}
+function getFile(name) { return path.join(publicPath, name); }
 
-// --- TRASY KLIENTA ---
-app.get('/', (req, res) => sendFileSafe(res, 'index.html'));
-app.get('/koszyk', (req, res) => sendFileSafe(res, 'koszyk.html'));
+// --- TRASY ---
+app.get('/', (req, res) => res.sendFile(getFile('index.html')));
+app.get('/koszyk', (req, res) => res.sendFile(getFile('koszyk.html')));
 
 app.get('/sklep', (req, res) => {
     db.all("SELECT * FROM products", (err, rows) => {
-        let cardsHtml = (rows && rows.length > 0) 
-            ? rows.map(p => `
-                <div class="product-card">
-                    <img src="${p.imgUrl || 'https://via.placeholder.com/300x200?text=Czesc'}" alt="${p.name}">
-                    <div class="product-details">
-                        <h3>${p.name}</h3>
-                        <p class="price">${p.price.toFixed(2)} PLN</p>
-                        <p style="font-size:0.8em; color:#666; height:40px; overflow:hidden;">${p.desc || ''}</p>
-                        <button class="btn" onclick="addToCart(${p.id}, '${p.name}', ${p.price})">🛒 Dodaj do koszyka</button>
-                    </div>
-                </div>`).join('')
-            : '<div style="grid-column:1/-1; text-align:center; padding:50px;"><h3>Brak części w ofercie.</h3></div>';
+        let cards = (rows && rows.length > 0) ? rows.map(p => `
+            <div class="product-card">
+                <img src="${p.imgUrl || 'https://via.placeholder.com/300x200?text=Czesc'}" alt="${p.name}">
+                <div class="product-details">
+                    <h3>${p.name}</h3>
+                    <p class="price">${p.price.toFixed(2)} PLN</p>
+                    <p style="font-size:0.8em; color:#666;">${p.desc || ''}</p>
+                    <button class="btn" onclick="addToCart(${p.id}, '${p.name}', ${p.price})">🛒 Dodaj</button>
+                </div>
+            </div>`).join('') : '<p style="grid-column:1/-1; text-align:center;">Brak części w ofercie.</p>';
         
-        const sklepPath = path.join(publicPath, 'sklep.html');
-        if (fs.existsSync(sklepPath)) {
-            const html = fs.readFileSync(sklepPath, 'utf8');
-            res.send(html.replace('', cardsHtml));
-        } else res.status(404).send("Brak pliku sklep.html");
+        const html = fs.readFileSync(getFile('sklep.html'), 'utf8');
+        res.send(html.replace('', cards));
     });
 });
 
@@ -60,19 +50,19 @@ app.post('/add-request-client', (req, res) => {
     const { client, phone, car, vin, service_type, desc } = req.body;
     db.run("INSERT INTO requests (client, phone, car, vin, service_type, desc) VALUES (?,?,?,?,?,?)", 
     [client, phone, car, vin, service_type, desc], (err) => {
-        if (err) return res.status(500).send("Błąd bazy: " + err.message);
+        if (err) return res.status(500).send("Błąd bazy danych.");
         res.send("<script>alert('Zlecenie wysłane!'); window.location='/';</script>");
     });
 });
 
 // --- ADMIN ---
 app.get('/login', (req, res) => {
-    res.send('<html><head><link rel="stylesheet" href="style.css"></head><body style="display:flex;justify-content:center;align-items:center;height:100vh;background:#f0f2f5;"><div class="card" style="width:320px;text-align:center;"><h2>Panel Admina</h2><form action="/login" method="POST"><input name="u" placeholder="Login" required><input type="password" name="p" placeholder="Hasło" required><button class="btn">Zaloguj</button></form></div></body></html>');
+    res.send(`<html><head><link rel="stylesheet" href="style.css"></head><body style="display:flex;justify-content:center;align-items:center;height:100vh;background:#f0f2f5;"><div class="card" style="width:320px;text-align:center;"><h2>Logowanie Admina</h2><form action="/login" method="POST"><input name="u" placeholder="Login" required><input type="password" name="p" placeholder="Hasło" required><button class="btn">Zaloguj</button></form><br><a href="/">Powrót</a></div></body></html>`);
 });
 
 app.post('/login', (req, res) => {
     if(req.body.u === 'admin' && req.body.p === 'admin123') { req.session.isAdmin = true; res.redirect('/admin'); }
-    else res.send("Błąd logowania!");
+    else res.send("<script>alert('Błędne dane!'); window.location='/login';</script>");
 });
 
 app.get('/admin', (req, res) => {
@@ -80,8 +70,8 @@ app.get('/admin', (req, res) => {
     db.all("SELECT * FROM requests ORDER BY id DESC", (err, reqs) => {
         db.all("SELECT * FROM products", (err, prods) => {
             const rList = (reqs || []).map(r => `<div style="padding:10px; border-bottom:1px solid #ddd;"><b>${r.car}</b> - ${r.client} (${r.phone}) <a href="/admin/del-r/${r.id}" style="color:red; float:right;">Usuń</a></div>`).join('');
-            const pList = (prods || []).map(p => `<li>${p.name} - ${p.price} zł <a href="/admin/del-p/${p.id}" style="color:red; float:right;">Usuń</a></li>`).join('');
-            res.send(`<html><head><link rel="stylesheet" href="style.css"></head><body class="container"><h1>Panel Manager</h1><a href="/logout">Wyloguj</a> | <a href="/sklep">Sklep</a><div style="display:flex; gap:20px; margin-top:20px;"><div style="flex:1;"><h3>Zlecenia:</h3>${rList || 'Brak'}</div><div style="flex:1;" class="card"><h3>Dodaj produkt:</h3><form action="/admin/add" method="POST"><input name="n" placeholder="Nazwa"><input name="pr" type="number" step="0.01" placeholder="Cena"><input name="img" placeholder="Link do zdjęcia"><textarea name="d" placeholder="Opis"></textarea><button class="btn">Dodaj</button></form><ul>${pList}</ul></div></div></body></html>`);
+            const pList = (prods || []).map(p => `<li>${p.name} - ${p.price} zł <a href="/admin/del-p/${p.id}" style="color:red; float:right;">[X]</a></li>`).join('');
+            res.send(`<html><head><link rel="stylesheet" href="style.css"></head><body class="container"><h1>Panel Zarządzania</h1><nav style="background:none; padding:0; margin-bottom:20px;"><a href="/" style="color:blue;">Strona Główna</a> | <a href="/logout" style="color:red;">Wyloguj</a></nav><div style="display:flex; gap:20px;"><div style="flex:1.5;"><h3>Zlecenia:</h3>${rList || 'Brak'}</div><div style="flex:1;" class="card"><h3>Dodaj do sklepu:</h3><form action="/admin/add" method="POST"><input name="n" placeholder="Nazwa części" required><input name="pr" type="number" step="0.01" placeholder="Cena" required><input name="img" placeholder="Link do zdjęcia"><textarea name="d" placeholder="Opis"></textarea><button class="btn">Dodaj Produkt</button></form><ul style="margin-top:20px;">${pList}</ul></div></div></body></html>`);
         });
     });
 });
