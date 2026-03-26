@@ -4,35 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Koszyk | Auto-Spec</title>
+    <title>Twój Koszyk</title>
 </head>
 <body>
     <nav><div class="nav-container"><b style="color:white;">🛠 AUTO-SPEC</b><div><a href="/sklep">Wróć do sklepu</a></div></div></nav>
     <div class="container">
         <div class="card">
-            <h2>Twoje Zamówienie</h2>
-            <div id="cart-content"></div>
+            <h2>🛒 Zawartość Koszyka</h2>
+            <div id="cart-list"></div>
             <hr>
             <div style="text-align:right;">
-                <h3>Suma: <span id="total-price">0.00</span> PLN</h3>
-                <button class="btn" style="width:200px;" onclick="alert('Zamówienie w trakcie realizacji...')">Kupuję i płacę</button>
-                <button class="btn" style="width:200px; background:#666; margin-top:10px;" onclick="localStorage.removeItem('cart'); location.reload();">Wyczyść</button>
+                <h3>Suma: <span id="total">0.00</span> PLN</h3>
+                <button class="btn" style="width:200px;" onclick="alert('Dziękujemy! Skontaktujemy się w celu potwierdzenia zamówienia.')">Złóż zamówienie</button>
+                <button class="btn" style="width:200px; background:#666; margin-top:10px;" onclick="localStorage.removeItem('cart'); location.reload();">Opróżnij koszyk</button>
             </div>
         </div>
     </div>
     <script>
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const container = document.getElementById('cart-content');
+        const list = document.getElementById('cart-list');
         let total = 0;
-        if(cart.length === 0) container.innerHTML = "Koszyk jest pusty.";
+        if(cart.length === 0) list.innerHTML = "<p>Koszyk jest pusty.</p>";
         else {
-            container.innerHTML = cart.map(i => {
+            list.innerHTML = cart.map(i => {
                 total += (i.price * i.qty);
                 return `<div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
-                    <span>${i.name} (x${i.qty})</span><span>${(i.price * i.qty).toFixed(2)} PLN</span>
+                    <span><b>${i.name}</b> (x${i.qty})</span><span>${(i.price * i.qty).toFixed(2)} zł</span>
                 </div>`;
             }).join('');
-            document.getElementById('total-price').innerText = total.toFixed(2);
+            document.getElementById('total').innerText = total.toFixed(2);
         }
     </script>
 </body>
