@@ -4,22 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Sklep | Auto-Spec</title>
+    <title>Sklep Części | Auto-Spec</title>
 </head>
 <body>
     <nav>
         <div class="nav-container">
-            <b style="color:white; font-size:1.4em;">🛠 AUTO-SPEC</b>
+            <b style="color:white;">🛠 AUTO-SPEC</b>
             <div>
                 <a href="/">Serwis</a>
                 <a href="/sklep">Sklep</a>
-                <a href="/koszyk" style="color:var(--accent); font-weight:bold;">🛒 <span id="cart-counter">[0]</span></a>
+                <a href="/koszyk" style="color:var(--accent); font-weight:bold; margin-left:15px;">🛒 <span id="cart-counter">[0]</span></a>
             </div>
         </div>
     </nav>
-    <header><h1>Sklep Części</h1><p>Zamów i odbierz w warsztacie</p></header>
-    <div class="container"><div class="products-grid"></div></div>
-    <footer><p>Auto-Spec Babice - Najlepsze części w okolicy</p></footer>
+    <header><h1>Sklep z Częściami</h1></header>
+    <div class="container">
+        <div class="products-grid">
+            </div>
+    </div>
     <script>
         function updateCounter() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
