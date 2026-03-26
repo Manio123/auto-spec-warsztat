@@ -13,31 +13,18 @@
             <div>
                 <a href="/">Serwis</a>
                 <a href="/sklep">Sklep</a>
-                <a href="/koszyk" style="color:var(--accent); font-size:1.2em;">🛒 <span id="cart-counter">[0]</span></a>
+                <a href="/koszyk" style="color:var(--accent); font-weight:bold;">🛒 <span id="cart-counter">[0]</span></a>
             </div>
         </div>
     </nav>
-
-    <header><h1>Sklep Części</h1><p>Wybierz podzespoły i sprawdź koszyk.</p></header>
-
-    <div class="container">
-        <div class="products-grid">
-            </div>
-    </div>
-
-    <footer>
-        <div class="footer-grid">
-            <div><h4 style="color:var(--accent);">KONTAKT</h4><p>📞 +48 123 456 789</p><p>ul. Warsztatowa 1, Babice</p></div>
-        </div>
-    </footer>
-
+    <header><h1>Sklep Części</h1><p>Zamów i odbierz w warsztacie</p></header>
+    <div class="container"><div class="products-grid"></div></div>
+    <footer><p>Auto-Spec Babice - Najlepsze części w okolicy</p></footer>
     <script>
         function updateCounter() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const count = cart.reduce((s, i) => s + i.qty, 0);
-            document.getElementById('cart-counter').innerText = "[" + count + "]";
+            document.getElementById('cart-counter').innerText = "[" + cart.reduce((s, i) => s + i.qty, 0) + "]";
         }
-
         function addToCart(id, name, price) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const idx = cart.findIndex(i => i.id === id);
@@ -45,7 +32,7 @@
             else cart.push({id, name, price, qty: 1});
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCounter();
-            alert('Dodano: ' + name);
+            alert('Dodano do koszyka!');
         }
         updateCounter();
     </script>
