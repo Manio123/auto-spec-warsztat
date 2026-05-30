@@ -7,57 +7,81 @@
     <title>Auto-Spec | Serwis</title>
 </head>
 <body>
+
     <nav>
         <div class="nav-container">
-            <b style="color:white; font-size:1.4em;">🛠 AUTO-SPEC</b>
-            <div>
-                <a href="/">Serwis</a>
+            <div class="logo">🛠 AUTO-SPEC <span>| SERWIS</span></div>
+            <div class="nav-links">
+                <a href="/" class="active">Serwis</a>
+                <a href="https://manio123.github.io/vin-decoder/">Dekoder VIN</a>
                 <a href="/sklep">Sklep</a>
-                <a href="/login" class="admin-link">Panel Admina</a>
+                <a href="/koszyk">🛒 [<span id="cart-count">0</span>]</a>
+                <a href="/login" style="background: var(--primary-color); color: white; padding: 5px 10px; border-radius: 4px; margin-left: 15px;">Admin</a>
             </div>
         </div>
     </nav>
-    <header><h1>Serwis Samochodowy</h1><p>Profesjonalna naprawa Twojego auta.</p></header>
+
+    <header>
+        <h1>Serwis Samochodowy Babice</h1>
+        <p>Profesjonalna naprawa, diagnostyka i pełne wsparcie dla Twojego auta.</p>
+    </header>
+
     <div class="container">
-        <div class="card">
-            <h2>Umów wizytę online</h2>
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <h2>Zgłoś naprawę online</h2>
             <form action="/add-request-client" method="POST">
-                <input type="text" name="client" placeholder="Imię i Nazwisko" required>
-                <input type="tel" name="phone" placeholder="Twój Telefon" required>
-                <input type="text" name="car" placeholder="Marka i Model auta" required>
-                <input type="text" name="vin" placeholder="Numer VIN">
+                <label>Imię i Nazwisko:</label>
+                <input type="text" name="client" placeholder="Np. Jan Kowalski" required>
+                
+                <label>Numer telefonu:</label>
+                <input type="tel" name="phone" placeholder="Np. 500 600 700" required>
+                
+                <label>Pojazd (Marka i Model):</label>
+                <input type="text" name="car" placeholder="Np. Audi A4 B8" required>
+                
+                <label>Numer VIN (Opcjonalnie):</label>
+                <input type="text" name="vin" placeholder="17 znaków" maxlength="17" style="text-transform: uppercase;">
+                
+                <label>Rodzaj usługi:</label>
                 <select name="service_type">
-                    <option value="Mechanika">Mechanika Ogólna</option>
-                    <option value="Olej">Wymiana Oleju</option>
-                    <option value="Klima">Serwis Klimatyzacji</option>
+                    <option value="Mechanika Ogólna">Mechanika Ogólna</option>
+                    <option value="Wymiana Oleju i Filtrów">Wymiana Oleju i Filtrów</option>
+                    <option value="Serwis Klimatyzacji">Serwis Klimatyzacji</option>
+                    <option value="Układ Hamulcowy">Układ Hamulcowy</option>
                 </select>
-                <textarea name="desc" placeholder="Opis usterki..."></textarea>
-                <button type="submit" class="btn">Wyślij zgłoszenie</button>
+                
+                <label>Opis usterki / Uwagi:</label>
+                <textarea name="desc" placeholder="Opisz objawy usterki, abyśmy mogli lepiej przygotować się do naprawy..."></textarea>
+                
+                <button type="submit" class="btn">Wyślij Zgłoszenie Serwisowe</button>
             </form>
         </div>
     </div>
-<footer>
-    <div class="footer-container">
-        <div class="footer-section">
-            <h4>KONTAKT</h4>
-            <p>📞 <b>Telefon:</b> +48 123 456 789</p>
-            <p>📧 <b>Email:</b> kontakt@auto-spec.pl</p>
-            <p>📍 <b>Adres:</b> ul. Warsztatowa 1, 32-551 Babice</p>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>KONTAKT</h4>
+                <p>📞 <strong>Telefon:</strong> +48 123 456 789</p>
+                <p>📧 <strong>Email:</strong> kontakt@auto-spec.pl</p>
+                <p>📍 <strong>Adres:</strong> ul. Warsztatowa 1, 32-551 Babice</p>
+            </div>
+            <div class="footer-section">
+                <h4>GODZINY OTWARCIA</h4>
+                <p>Poniedziałek - Piątek: 08:00 - 18:00</p>
+                <p>Sobota: 09:00 - 14:00</p>
+                <p>Niedziela: Zamknięte</p>
+            </div>
+            <div class="footer-section">
+                <h4>O NAS</h4>
+                <p>Jesteśmy profesjonalnym serwisem z wieloletnim doświadczeniem. Dbamy o Twoje auto jak o własne! Skorzystaj z naszego dekodera i sprawdź naszą ofertę.</p>
+            </div>
         </div>
-        <div class="footer-section">
-            <h4>GODZINY OTWARCIA</h4>
-            <p>Poniedziałek - Piątek: 08:00 - 18:00</p>
-            <p>Sobota: 09:00 - 14:00</p>
-            <p>Niedziela: Zamknięte</p>
+        <div class="footer-bottom">
+            &copy; 2026 Auto-Spec Warsztat Samochodowy Babice. Wszystkie prawa zastrzeżone.
         </div>
-        <div class="footer-section">
-            <h4>O NAS</h4>
-            <p>Jesteśmy profesjonalnym serwisem z wieloletnim doświadczeniem. Dbamy o Twoje auto jak o własne!</p>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        &copy; 2026 Auto-Spec Warsztat Samochodowy Babice. Wszystkie prawa zastrzeżone.
-    </div>
-</footer>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
