@@ -4,39 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Sklep Części | Auto-Spec</title>
+    <title>Auto-Spec | Sklep z Częściami</title>
 </head>
 <body>
+
     <nav>
         <div class="nav-container">
-            <b style="color:white;">🛠 AUTO-SPEC</b>
-            <div>
+            <div class="logo">🛠 AUTO-SPEC <span>| SKLEP</span></div>
+            <div class="nav-links">
                 <a href="/">Serwis</a>
-                <a href="/sklep">Sklep</a>
-                <a href="/koszyk" style="color:var(--accent); font-weight:bold; margin-left:15px;">🛒 <span id="cart-counter">[0]</span></a>
+                <a href="/vin">Dekoder VIN</a>
+                <a href="/sklep" class="active">Sklep</a>
+                <a href="/koszyk">🛒 [<span id="cart-count">0</span>]</a>
             </div>
         </div>
     </nav>
-    <header><h1>Sklep z Częściami</h1></header>
+
+    <header>
+        <h1>Sklep z Częściami Zamiennymi</h1>
+        <p>Oryginalne komponenty oraz sprawdzone zamienniki najwyższej jakości.</p>
+    </header>
+
     <div class="container">
         <div class="products-grid">
             </div>
     </div>
-    <script>
-        function updateCounter() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            document.getElementById('cart-counter').innerText = "[" + cart.reduce((s, i) => s + i.qty, 0) + "]";
-        }
-        function addToCart(id, name, price) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const idx = cart.findIndex(i => i.id === id);
-            if(idx > -1) cart[idx].qty += 1;
-            else cart.push({id, name, price, qty: 1});
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCounter();
-            alert('Dodano do koszyka!');
-        }
-        updateCounter();
-    </script>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>KONTAKT</h4>
+                <p>📞 <strong>Telefon:</strong> +48 123 456 789</p>
+                <p>📧 <strong>Email:</strong> kontakt@auto-spec.pl</p>
+                <p>📍 <strong>Adres:</strong> ul. Warsztatowa 1, 32-551 Babice</p>
+            </div>
+            <div class="footer-section">
+                <h4>GODZINY OTWARCIA</h4>
+                <p>Poniedziałek - Piątek: 08:00 - 18:00</p>
+                <p>Sobota: 09:00 - 14:00</p>
+                <p>Niedziela: Zamknięte</p>
+            </div>
+            <div class="footer-section">
+                <h4>O NAS</h4>
+                <p>Kupujesz bezpośrednio z magazynu naszego warsztatu. Gwarancja dopasowania części po numerze VIN przy montażu na miejscu.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Auto-Spec Warsztat Samochodowy Babice. Wszystkie prawa zastrzeżone.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
